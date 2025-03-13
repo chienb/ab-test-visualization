@@ -1,0 +1,123 @@
+import React from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { theme } from '../../styles/theme';
+
+const DashboardContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: ${theme.spacing.lg};
+`;
+
+const Card = styled.div`
+  background-color: ${theme.colors.background};
+  border-radius: ${theme.borderRadius.medium};
+  padding: ${theme.spacing.lg};
+  box-shadow: ${theme.shadows.medium};
+  transition: transform ${theme.transitions.medium}, box-shadow ${theme.transitions.medium};
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: ${theme.shadows.large};
+  }
+`;
+
+const CardTitle = styled.h3`
+  color: ${theme.colors.primary};
+  margin-bottom: ${theme.spacing.sm};
+`;
+
+const CardContent = styled.p`
+  color: ${theme.colors.textLight};
+  margin-bottom: ${theme.spacing.md};
+`;
+
+const CardLink = styled(Link)`
+  display: inline-block;
+  margin-top: ${theme.spacing.sm};
+  color: ${theme.colors.primary};
+  font-weight: 500;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const WelcomeSection = styled.div`
+  margin-bottom: ${theme.spacing.xl};
+  grid-column: 1 / -1;
+`;
+
+const WelcomeTitle = styled.h1`
+  color: ${theme.colors.primary};
+  margin-bottom: ${theme.spacing.sm};
+`;
+
+const WelcomeText = styled.p`
+  font-size: ${theme.fontSizes.medium};
+  max-width: 800px;
+`;
+
+const Dashboard: React.FC = () => {
+  return (
+    <>
+      <WelcomeSection>
+        <WelcomeTitle>Welcome to A/B Vision</WelcomeTitle>
+        <WelcomeText>
+          Optimize your beauty e-commerce conversion funnel with predictive click-pattern analysis. 
+          Upload your design mockups and get instant visual feedback on user engagement probability, 
+          all without running actual A/B tests.
+        </WelcomeText>
+      </WelcomeSection>
+      
+      <DashboardContainer>
+        <Card>
+          <CardTitle>Upload Mockups</CardTitle>
+          <CardContent>
+            Upload your design variations to begin the analysis process. 
+            We support PNG, JPG, and PDF formats.
+          </CardContent>
+          <CardLink to="/upload">Get Started →</CardLink>
+        </Card>
+        
+        <Card>
+          <CardTitle>Heat Map Comparison</CardTitle>
+          <CardContent>
+            Compare predicted click patterns between design variations with 
+            interactive heat maps.
+          </CardContent>
+          <CardLink to="/comparison">View Heat Maps →</CardLink>
+        </Card>
+        
+        <Card>
+          <CardTitle>Metrics Analysis</CardTitle>
+          <CardContent>
+            Analyze predicted engagement metrics and conversion funnel 
+            performance for your designs.
+          </CardContent>
+          <CardLink to="/metrics">Explore Metrics →</CardLink>
+        </Card>
+        
+        <Card>
+          <CardTitle>Analytics Integration</CardTitle>
+          <CardContent>
+            See how our predictions would integrate with popular analytics 
+            platforms like GA4 and Hotjar.
+          </CardContent>
+          <CardLink to="/integration">View Integrations →</CardLink>
+        </Card>
+        
+        <Card>
+          <CardTitle>Report Generation</CardTitle>
+          <CardContent>
+            Generate comprehensive reports with insights and 
+            recommendations for your design decisions.
+          </CardContent>
+          <CardLink to="/report">Create Report →</CardLink>
+        </Card>
+      </DashboardContainer>
+    </>
+  );
+};
+
+export default Dashboard;

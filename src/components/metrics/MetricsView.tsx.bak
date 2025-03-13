@@ -1,0 +1,471 @@
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { theme } from '../../styles/theme';
+
+const MetricsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing.lg};
+`;
+
+const SectionTitle = styled.h2`
+  color: ${theme.colors.primary};
+  margin-bottom: ${theme.spacing.md};
+`;
+
+const SectionDescription = styled.p`
+  color: ${theme.colors.textLight};
+  max-width: 800px;
+  margin-bottom: ${theme.spacing.lg};
+`;
+
+const TabContainer = styled.div`
+  display: flex;
+  border-bottom: 1px solid ${theme.colors.border};
+  margin-bottom: ${theme.spacing.lg};
+`;
+
+const Tab = styled.button<{ active?: boolean }>`
+  padding: ${theme.spacing.sm} ${theme.spacing.lg};
+  background-color: ${props => props.active ? theme.colors.background : 'transparent'};
+  color: ${props => props.active ? theme.colors.primary : theme.colors.textLight};
+  border: none;
+  border-bottom: 3px solid ${props => props.active ? theme.colors.primary : 'transparent'};
+  font-size: ${theme.fontSizes.medium};
+  cursor: pointer;
+  transition: all ${theme.transitions.short};
+  
+  &:hover {
+    color: ${theme.colors.primary};
+  }
+`;
+
+const MetricsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: ${theme.spacing.lg};
+`;
+
+const MetricCard = styled.div`
+  background-color: ${theme.colors.background};
+  border-radius: ${theme.borderRadius.medium};
+  padding: ${theme.spacing.lg};
+  box-shadow: ${theme.shadows.medium};
+`;
+
+const MetricTitle = styled.h3`
+  color: ${theme.colors.primary};
+  margin-bottom: ${theme.spacing.md};
+`;
+
+const MetricChart = styled.div`
+  height: 200px;
+  background-color: ${theme.colors.backgroundAlt};
+  border-radius: ${theme.borderRadius.small};
+  margin-bottom: ${theme.spacing.md};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ComparisonTable = styled.div`
+  background-color: ${theme.colors.background};
+  border-radius: ${theme.borderRadius.medium};
+  padding: ${theme.spacing.lg};
+  box-shadow: ${theme.shadows.medium};
+  margin-top: ${theme.spacing.lg};
+`;
+
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+`;
+
+const TableHead = styled.thead`
+  background-color: ${theme.colors.backgroundAlt};
+  
+  th {
+    padding: ${theme.spacing.md};
+    text-align: left;
+    font-weight: 500;
+    color: ${theme.colors.primary};
+  }
+`;
+
+const TableBody = styled.tbody`
+  tr:nth-child(even) {
+    background-color: ${theme.colors.backgroundAlt};
+  }
+  
+  td {
+    padding: ${theme.spacing.md};
+    border-top: 1px solid ${theme.colors.border};
+  }
+`;
+
+const MetricValue = styled.span<{ positive?: boolean; negative?: boolean }>`
+  color: ${props => {
+    if (props.positive) return theme.colors.success;
+    if (props.negative) return theme.colors.error;
+    return theme.colors.text;
+  }};
+  font-weight: ${props => (props.positive || props.negative) ? '600' : 'normal'};
+`;
+
+const FunnelContainer = styled.div`
+  margin-top: ${theme.spacing.xl};
+`;
+
+const FunnelSteps = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing.md};
+  max-width: 800px;
+  margin: 0 auto;
+`;
+
+const FunnelStep = styled.div<{ width: number }>`
+  background-color: ${theme.colors.primary};
+  height: 60px;
+  width: ${props => props.width}%;
+  border-radius: ${theme.borderRadius.small};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 ${theme.spacing.lg};
+  color: white;
+  font-weight: 500;
+  position: relative;
+  
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: -${theme.spacing.md};
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 15px solid ${theme.colors.primary};
+  }
+  
+  &:last-child:after {
+    display: none;
+  }
+`;
+
+const FunnelLabel = styled.span``;
+
+const FunnelValue = styled.span``;
+
+const MetricsView: React.FC = () => {
+  const [activeTab, setActiveTab] = useState('overview');
+  
+  return (
+    <MetricsContainer>
+      <div>
+        <SectionTitle>Metrics Analysis</SectionTitle>
+        <SectionDescription>
+          Analyze predicted engagement metrics and conversion funnel performance for your design variations.
+          Compare key metrics side by side to identify which design is likely to perform better.
+        </SectionDescription>
+      </div>
+      
+      <TabContainer>
+        <Tab 
+          active={activeTab === 'overview'} 
+          onClick={() => setActiveTab('overview')}
+        >
+          Overview
+        </Tab>
+        <Tab 
+          active={activeTab === 'funnel'} 
+          onClick={() => setActiveTab('funnel')}
+        >
+          Conversion Funnel
+        </Tab>
+        <Tab 
+          active={activeTab === 'detailed'} 
+          onClick={() => setActiveTab('detailed')}
+        >
+          Detailed Metrics
+        </Tab>
+      </TabContainer>
+      
+      {activeTab === 'overview' && (
+        <>
+          <MetricsGrid>
+            <MetricCard>
+              <MetricTitle>Click-Through Rate</MetricTitle>
+              <MetricChart>Chart Placeholder</MetricChart>
+              <p>Design B shows a 46.9% improvement in predicted click-through rate compared to Design A.</p>
+            </MetricCard>
+            
+            <MetricCard>
+              <MetricTitle>Engagement Time</MetricTitle>
+              <MetricChart>Chart Placeholder</MetricChart>
+              <p>Users are predicted to spend 28.9% more time engaging with Design B.</p>
+            </MetricCard>
+            
+            <MetricCard>
+              <MetricTitle>Add-to-Cart Rate</MetricTitle>
+              <MetricChart>Chart Placeholder</MetricChart>
+              <p>Design B is expected to generate 39.3% more add-to-cart actions.</p>
+            </MetricCard>
+            
+            <MetricCard>
+              <MetricTitle>Checkout Completion</MetricTitle>
+              <MetricChart>Chart Placeholder</MetricChart>
+              <p>Design B may improve checkout completion by 22.5% over Design A.</p>
+            </MetricCard>
+          </MetricsGrid>
+          
+          <ComparisonTable>
+            <h3>Metrics Comparison</h3>
+            <Table>
+              <TableHead>
+                <tr>
+                  <th>Metric</th>
+                  <th>Design A</th>
+                  <th>Design B</th>
+                  <th>Difference</th>
+                </tr>
+              </TableHead>
+              <TableBody>
+                <tr>
+                  <td>Click-Through Rate</td>
+                  <td>3.2%</td>
+                  <td>4.7%</td>
+                  <td><MetricValue positive>+1.5% (+46.9%)</MetricValue></td>
+                </tr>
+                <tr>
+                  <td>Engagement Time</td>
+                  <td>45s</td>
+                  <td>58s</td>
+                  <td><MetricValue positive>+13s (+28.9%)</MetricValue></td>
+                </tr>
+                <tr>
+                  <td>Add-to-Cart Rate</td>
+                  <td>2.8%</td>
+                  <td>3.9%</td>
+                  <td><MetricValue positive>+1.1% (+39.3%)</MetricValue></td>
+                </tr>
+                <tr>
+                  <td>Checkout Completion</td>
+                  <td>1.6%</td>
+                  <td>1.96%</td>
+                  <td><MetricValue positive>+0.36% (+22.5%)</MetricValue></td>
+                </tr>
+                <tr>
+                  <td>Bounce Rate</td>
+                  <td>42.5%</td>
+                  <td>38.2%</td>
+                  <td><MetricValue positive>-4.3% (-10.1%)</MetricValue></td>
+                </tr>
+              </TableBody>
+            </Table>
+          </ComparisonTable>
+        </>
+      )}
+      
+      {activeTab === 'funnel' && (
+        <FunnelContainer>
+          <h3>Conversion Funnel Comparison</h3>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginTop: '2rem' }}>
+            <div>
+              <h4 style={{ marginBottom: '1rem', textAlign: 'center' }}>Design A</h4>
+              <FunnelSteps>
+                <FunnelStep width={100}>
+                  <FunnelLabel>Page Visit</FunnelLabel>
+                  <FunnelValue>100%</FunnelValue>
+                </FunnelStep>
+                <FunnelStep width={65}>
+                  <FunnelLabel>Product View</FunnelLabel>
+                  <FunnelValue>65%</FunnelValue>
+                </FunnelStep>
+                <FunnelStep width={35}>
+                  <FunnelLabel>Add to Cart</FunnelLabel>
+                  <FunnelValue>35%</FunnelValue>
+                </FunnelStep>
+                <FunnelStep width={22}>
+                  <FunnelLabel>Checkout Started</FunnelLabel>
+                  <FunnelValue>22%</FunnelValue>
+                </FunnelStep>
+                <FunnelStep width={16}>
+                  <FunnelLabel>Purchase Complete</FunnelLabel>
+                  <FunnelValue>16%</FunnelValue>
+                </FunnelStep>
+              </FunnelSteps>
+            </div>
+            
+            <div>
+              <h4 style={{ marginBottom: '1rem', textAlign: 'center' }}>Design B</h4>
+              <FunnelSteps>
+                <FunnelStep width={100}>
+                  <FunnelLabel>Page Visit</FunnelLabel>
+                  <FunnelValue>100%</FunnelValue>
+                </FunnelStep>
+                <FunnelStep width={72}>
+                  <FunnelLabel>Product View</FunnelLabel>
+                  <FunnelValue>72%</FunnelValue>
+                </FunnelStep>
+                <FunnelStep width={48}>
+                  <FunnelLabel>Add to Cart</FunnelLabel>
+                  <FunnelValue>48%</FunnelValue>
+                </FunnelStep>
+                <FunnelStep width={32}>
+                  <FunnelLabel>Checkout Started</FunnelLabel>
+                  <FunnelValue>32%</FunnelValue>
+                </FunnelStep>
+                <FunnelStep width={24}>
+                  <FunnelLabel>Purchase Complete</FunnelLabel>
+                  <FunnelValue>24%</FunnelValue>
+                </FunnelStep>
+              </FunnelSteps>
+            </div>
+          </div>
+          
+          <ComparisonTable style={{ marginTop: '3rem' }}>
+            <h3>Funnel Conversion Rates</h3>
+            <Table>
+              <TableHead>
+                <tr>
+                  <th>Funnel Step</th>
+                  <th>Design A</th>
+                  <th>Design B</th>
+                  <th>Improvement</th>
+                </tr>
+              </TableHead>
+              <TableBody>
+                <tr>
+                  <td>Visit → Product View</td>
+                  <td>65%</td>
+                  <td>72%</td>
+                  <td><MetricValue positive>+7% (+10.8%)</MetricValue></td>
+                </tr>
+                <tr>
+                  <td>Product View → Add to Cart</td>
+                  <td>53.8%</td>
+                  <td>66.7%</td>
+                  <td><MetricValue positive>+12.9% (+24%)</MetricValue></td>
+                </tr>
+                <tr>
+                  <td>Add to Cart → Checkout</td>
+                  <td>62.9%</td>
+                  <td>66.7%</td>
+                  <td><MetricValue positive>+3.8% (+6%)</MetricValue></td>
+                </tr>
+                <tr>
+                  <td>Checkout → Purchase</td>
+                  <td>72.7%</td>
+                  <td>75%</td>
+                  <td><MetricValue positive>+2.3% (+3.2%)</MetricValue></td>
+                </tr>
+                <tr>
+                  <td>Overall Conversion Rate</td>
+                  <td>16%</td>
+                  <td>24%</td>
+                  <td><MetricValue positive>+8% (+50%)</MetricValue></td>
+                </tr>
+              </TableBody>
+            </Table>
+          </ComparisonTable>
+        </FunnelContainer>
+      )}
+      
+      {activeTab === 'detailed' && (
+        <ComparisonTable>
+          <h3>Detailed Metrics Analysis</h3>
+          <Table>
+            <TableHead>
+              <tr>
+                <th>Metric</th>
+                <th>Design A</th>
+                <th>Design B</th>
+                <th>Difference</th>
+              </tr>
+            </TableHead>
+            <TableBody>
+              <tr>
+                <td>Click-Through Rate</td>
+                <td>3.2%</td>
+                <td>4.7%</td>
+                <td><MetricValue positive>+1.5% (+46.9%)</MetricValue></td>
+              </tr>
+              <tr>
+                <td>Engagement Time</td>
+                <td>45s</td>
+                <td>58s</td>
+                <td><MetricValue positive>+13s (+28.9%)</MetricValue></td>
+              </tr>
+              <tr>
+                <td>Add-to-Cart Rate</td>
+                <td>2.8%</td>
+                <td>3.9%</td>
+                <td><MetricValue positive>+1.1% (+39.3%)</MetricValue></td>
+              </tr>
+              <tr>
+                <td>Checkout Completion</td>
+                <td>1.6%</td>
+                <td>1.96%</td>
+                <td><MetricValue positive>+0.36% (+22.5%)</MetricValue></td>
+              </tr>
+              <tr>
+                <td>Bounce Rate</td>
+                <td>42.5%</td>
+                <td>38.2%</td>
+                <td><MetricValue positive>-4.3% (-10.1%)</MetricValue></td>
+              </tr>
+              <tr>
+                <td>Average Page Depth</td>
+                <td>2.3</td>
+                <td>3.1</td>
+                <td><MetricValue positive>+0.8 (+34.8%)</MetricValue></td>
+              </tr>
+              <tr>
+                <td>Product View Rate</td>
+                <td>65%</td>
+                <td>72%</td>
+                <td><MetricValue positive>+7% (+10.8%)</MetricValue></td>
+              </tr>
+              <tr>
+                <td>Scroll Depth (avg)</td>
+                <td>65%</td>
+                <td>78%</td>
+                <td><MetricValue positive>+13% (+20%)</MetricValue></td>
+              </tr>
+              <tr>
+                <td>Mobile Engagement</td>
+                <td>38%</td>
+                <td>52%</td>
+                <td><MetricValue positive>+14% (+36.8%)</MetricValue></td>
+              </tr>
+              <tr>
+                <td>Desktop Engagement</td>
+                <td>42%</td>
+                <td>48%</td>
+                <td><MetricValue positive>+6% (+14.3%)</MetricValue></td>
+              </tr>
+              <tr>
+                <td>Return Visit Rate</td>
+                <td>22%</td>
+                <td>29%</td>
+                <td><MetricValue positive>+7% (+31.8%)</MetricValue></td>
+              </tr>
+              <tr>
+                <td>Average Order Value</td>
+                <td>$68.50</td>
+                <td>$72.25</td>
+                <td><MetricValue positive>+$3.75 (+5.5%)</MetricValue></td>
+              </tr>
+            </TableBody>
+          </Table>
+        </ComparisonTable>
+      )}
+    </MetricsContainer>
+  );
+};
+
+export default MetricsView;

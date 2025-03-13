@@ -1,0 +1,468 @@
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { theme } from '../../styles/theme';
+
+const ReportContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing.lg};
+`;
+
+const SectionTitle = styled.h2`
+  color: ${theme.colors.primary};
+  margin-bottom: ${theme.spacing.md};
+`;
+
+const SectionDescription = styled.p`
+  color: ${theme.colors.textLight};
+  max-width: 800px;
+  margin-bottom: ${theme.spacing.lg};
+`;
+
+const ReportCard = styled.div`
+  background-color: ${theme.colors.background};
+  border-radius: ${theme.borderRadius.medium};
+  padding: ${theme.spacing.lg};
+  box-shadow: ${theme.shadows.medium};
+`;
+
+const ReportHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: ${theme.spacing.lg};
+  padding-bottom: ${theme.spacing.md};
+  border-bottom: 1px solid ${theme.colors.border};
+`;
+
+const ReportTitle = styled.h3`
+  color: ${theme.colors.primary};
+  margin: 0;
+`;
+
+const ReportDate = styled.span`
+  color: ${theme.colors.textLight};
+  font-size: ${theme.fontSizes.small};
+`;
+
+const ReportSection = styled.div`
+  margin-bottom: ${theme.spacing.lg};
+`;
+
+const ReportSectionTitle = styled.h4`
+  color: ${theme.colors.primary};
+  margin-bottom: ${theme.spacing.md};
+`;
+
+const SummaryBox = styled.div`
+  background-color: ${theme.colors.backgroundAlt};
+  border-radius: ${theme.borderRadius.medium};
+  padding: ${theme.spacing.md};
+  margin-bottom: ${theme.spacing.md};
+`;
+
+const MetricsTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: ${theme.spacing.lg};
+  
+  th, td {
+    padding: ${theme.spacing.sm};
+    text-align: left;
+    border-bottom: 1px solid ${theme.colors.border};
+  }
+  
+  th {
+    color: ${theme.colors.primary};
+    font-weight: 500;
+  }
+  
+  tr:last-child td {
+    border-bottom: none;
+  }
+`;
+
+const InsightItem = styled.div`
+  display: flex;
+  gap: ${theme.spacing.md};
+  margin-bottom: ${theme.spacing.md};
+  padding-bottom: ${theme.spacing.md};
+  border-bottom: 1px solid ${theme.colors.border};
+  
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+`;
+
+const InsightIcon = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: ${theme.borderRadius.circle};
+  background-color: ${theme.colors.primary};
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+`;
+
+const InsightContent = styled.div`
+  flex: 1;
+`;
+
+const InsightTitle = styled.h5`
+  margin: 0 0 ${theme.spacing.xs} 0;
+  color: ${theme.colors.text};
+`;
+
+const InsightDescription = styled.p`
+  margin: 0;
+  color: ${theme.colors.textLight};
+`;
+
+const RecommendationItem = styled.div`
+  display: flex;
+  gap: ${theme.spacing.md};
+  margin-bottom: ${theme.spacing.md};
+  padding-bottom: ${theme.spacing.md};
+  border-bottom: 1px solid ${theme.colors.border};
+  
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+`;
+
+const RecommendationNumber = styled.div`
+  width: 30px;
+  height: 30px;
+  border-radius: ${theme.borderRadius.circle};
+  background-color: ${theme.colors.primary};
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  flex-shrink: 0;
+`;
+
+const RecommendationContent = styled.div`
+  flex: 1;
+`;
+
+const RecommendationTitle = styled.h5`
+  margin: 0 0 ${theme.spacing.xs} 0;
+  color: ${theme.colors.text};
+`;
+
+const RecommendationDescription = styled.p`
+  margin: 0;
+  color: ${theme.colors.textLight};
+`;
+
+const VisualizationPlaceholder = styled.div`
+  height: 300px;
+  background-color: ${theme.colors.backgroundAlt};
+  border-radius: ${theme.borderRadius.medium};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: ${theme.spacing.md};
+`;
+
+const ActionButtons = styled.div`
+  display: flex;
+  gap: ${theme.spacing.md};
+  margin-top: ${theme.spacing.xl};
+`;
+
+const Button = styled.button<{ primary?: boolean }>`
+  background-color: ${props => props.primary ? theme.colors.primary : theme.colors.background};
+  color: ${props => props.primary ? 'white' : theme.colors.primary};
+  border: 1px solid ${props => props.primary ? 'transparent' : theme.colors.primary};
+  border-radius: ${theme.borderRadius.medium};
+  padding: ${theme.spacing.sm} ${theme.spacing.lg};
+  font-size: ${theme.fontSizes.medium};
+  cursor: pointer;
+  transition: all ${theme.transitions.short};
+  
+  &:hover {
+    background-color: ${props => props.primary ? theme.colors.accent : theme.colors.backgroundAlt};
+  }
+`;
+
+const ReportOptions = styled.div`
+  display: flex;
+  gap: ${theme.spacing.md};
+  margin-bottom: ${theme.spacing.lg};
+`;
+
+const OptionCard = styled.div<{ selected?: boolean }>`
+  flex: 1;
+  background-color: ${props => props.selected ? theme.colors.backgroundAlt : theme.colors.background};
+  border: 2px solid ${props => props.selected ? theme.colors.primary : theme.colors.border};
+  border-radius: ${theme.borderRadius.medium};
+  padding: ${theme.spacing.md};
+  cursor: pointer;
+  transition: all ${theme.transitions.short};
+  
+  &:hover {
+    border-color: ${theme.colors.primary};
+  }
+`;
+
+const OptionTitle = styled.h4`
+  color: ${theme.colors.primary};
+  margin: 0 0 ${theme.spacing.xs} 0;
+`;
+
+const OptionDescription = styled.p`
+  color: ${theme.colors.textLight};
+  margin: 0;
+  font-size: ${theme.fontSizes.small};
+`;
+
+const ReportView: React.FC = () => {
+  const [reportType, setReportType] = useState('comprehensive');
+  const currentDate = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  
+  return (
+    <ReportContainer>
+      <div>
+        <SectionTitle>Report Generation</SectionTitle>
+        <SectionDescription>
+          Generate comprehensive reports with insights and recommendations based on the analysis of your design variations.
+          These reports can be shared with stakeholders to support your design decisions with data-driven insights.
+        </SectionDescription>
+      </div>
+      
+      <ReportOptions>
+        <OptionCard 
+          selected={reportType === 'comprehensive'} 
+          onClick={() => setReportType('comprehensive')}
+        >
+          <OptionTitle>Comprehensive Report</OptionTitle>
+          <OptionDescription>
+            A detailed report with all metrics, insights, and recommendations.
+            Includes visualizations and side-by-side comparisons.
+          </OptionDescription>
+        </OptionCard>
+        
+        <OptionCard 
+          selected={reportType === 'executive'} 
+          onClick={() => setReportType('executive')}
+        >
+          <OptionTitle>Executive Summary</OptionTitle>
+          <OptionDescription>
+            A concise summary of key findings and recommendations.
+            Perfect for sharing with executives and stakeholders.
+          </OptionDescription>
+        </OptionCard>
+        
+        <OptionCard 
+          selected={reportType === 'technical'} 
+          onClick={() => setReportType('technical')}
+        >
+          <OptionTitle>Technical Report</OptionTitle>
+          <OptionDescription>
+            A detailed technical analysis with all metrics and data points.
+            Includes confidence scores and statistical significance.
+          </OptionDescription>
+        </OptionCard>
+      </ReportOptions>
+      
+      <ReportCard>
+        <ReportHeader>
+          <ReportTitle>A/B Test Analysis Report</ReportTitle>
+          <ReportDate>{currentDate}</ReportDate>
+        </ReportHeader>
+        
+        <ReportSection>
+          <ReportSectionTitle>Executive Summary</ReportSectionTitle>
+          <SummaryBox>
+            <p>
+              Based on our predictive analysis, <strong>Design B is expected to outperform Design A</strong> across all key metrics.
+              The most significant improvements are projected in Click-Through Rate (+46.9%) and Add-to-Cart Rate (+39.3%).
+              We recommend implementing Design B for the product page template, with specific attention to the call-to-action
+              placement and color scheme that contributed to these improvements.
+            </p>
+          </SummaryBox>
+        </ReportSection>
+        
+        <ReportSection>
+          <ReportSectionTitle>Key Metrics Comparison</ReportSectionTitle>
+          <MetricsTable>
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Design A</th>
+                <th>Design B</th>
+                <th>Difference</th>
+                <th>Confidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Click-Through Rate</td>
+                <td>3.2%</td>
+                <td>4.7%</td>
+                <td>+46.9%</td>
+                <td>High (85%)</td>
+              </tr>
+              <tr>
+                <td>Engagement Time</td>
+                <td>45s</td>
+                <td>58s</td>
+                <td>+28.9%</td>
+                <td>Medium (72%)</td>
+              </tr>
+              <tr>
+                <td>Add-to-Cart Rate</td>
+                <td>2.8%</td>
+                <td>3.9%</td>
+                <td>+39.3%</td>
+                <td>High (88%)</td>
+              </tr>
+              <tr>
+                <td>Checkout Completion</td>
+                <td>1.6%</td>
+                <td>1.96%</td>
+                <td>+22.5%</td>
+                <td>Medium (68%)</td>
+              </tr>
+              <tr>
+                <td>Overall Conversion</td>
+                <td>1.2%</td>
+                <td>1.7%</td>
+                <td>+41.7%</td>
+                <td>High (82%)</td>
+              </tr>
+            </tbody>
+          </MetricsTable>
+        </ReportSection>
+        
+        <ReportSection>
+          <ReportSectionTitle>Heat Map Comparison</ReportSectionTitle>
+          <VisualizationPlaceholder>Heat Map Visualization Placeholder</VisualizationPlaceholder>
+          <p>
+            The heat maps above show predicted click patterns for both designs. Design B shows more focused
+            attention on key conversion elements, particularly the product image, description, and call-to-action button.
+          </p>
+        </ReportSection>
+        
+        <ReportSection>
+          <ReportSectionTitle>Key Insights</ReportSectionTitle>
+          
+          <InsightItem>
+            <InsightIcon>1</InsightIcon>
+            <InsightContent>
+              <InsightTitle>Improved CTA Visibility</InsightTitle>
+              <InsightDescription>
+                Design B's call-to-action button receives 62% more attention due to its contrasting color
+                and strategic placement below the product description, directly in the user's visual path.
+              </InsightDescription>
+            </InsightContent>
+          </InsightItem>
+          
+          <InsightItem>
+            <InsightIcon>2</InsightIcon>
+            <InsightContent>
+              <InsightTitle>Enhanced Product Visualization</InsightTitle>
+              <InsightDescription>
+                The larger product images in Design B generate 47% more engagement, leading to increased
+                product understanding and higher likelihood of purchase consideration.
+              </InsightDescription>
+            </InsightContent>
+          </InsightItem>
+          
+          <InsightItem>
+            <InsightIcon>3</InsightIcon>
+            <InsightContent>
+              <InsightTitle>Streamlined Information Hierarchy</InsightTitle>
+              <InsightDescription>
+                Design B's clearer information hierarchy guides users through the content more effectively,
+                resulting in 28.9% longer engagement time and better product understanding.
+              </InsightDescription>
+            </InsightContent>
+          </InsightItem>
+          
+          <InsightItem>
+            <InsightIcon>4</InsightIcon>
+            <InsightContent>
+              <InsightTitle>Mobile Optimization Improvements</InsightTitle>
+              <InsightDescription>
+                Design B shows a 36.8% improvement in mobile engagement, likely due to the
+                larger touch targets and more scannable content layout.
+              </InsightDescription>
+            </InsightContent>
+          </InsightItem>
+        </ReportSection>
+        
+        <ReportSection>
+          <ReportSectionTitle>Recommendations</ReportSectionTitle>
+          
+          <RecommendationItem>
+            <RecommendationNumber>1</RecommendationNumber>
+            <RecommendationContent>
+              <RecommendationTitle>Implement Design B for Product Pages</RecommendationTitle>
+              <RecommendationDescription>
+                Based on the significant improvements across all key metrics, we recommend implementing
+                Design B for all beauty product pages, with particular attention to maintaining the
+                effective CTA placement and color contrast.
+              </RecommendationDescription>
+            </RecommendationContent>
+          </RecommendationItem>
+          
+          <RecommendationItem>
+            <RecommendationNumber>2</RecommendationNumber>
+            <RecommendationContent>
+              <RecommendationTitle>Further Optimize Mobile Experience</RecommendationTitle>
+              <RecommendationDescription>
+                While Design B shows significant improvements for mobile users, consider further
+                optimizations for the checkout process on mobile devices, where the largest drop-off
+                still occurs.
+              </RecommendationDescription>
+            </RecommendationContent>
+          </RecommendationItem>
+          
+          <RecommendationItem>
+            <RecommendationNumber>3</RecommendationNumber>
+            <RecommendationContent>
+              <RecommendationTitle>Conduct Live A/B Test to Validate</RecommendationTitle>
+              <RecommendationDescription>
+                While our predictions show strong confidence, we recommend conducting a live A/B test
+                with a small percentage of traffic to validate these findings before full implementation.
+              </RecommendationDescription>
+            </RecommendationContent>
+          </RecommendationItem>
+          
+          <RecommendationItem>
+            <RecommendationNumber>4</RecommendationNumber>
+            <RecommendationContent>
+              <RecommendationTitle>Apply Design B Principles to Other Templates</RecommendationTitle>
+              <RecommendationDescription>
+                Consider applying the successful design principles from Design B (clear hierarchy,
+                prominent product imagery, contrasting CTAs) to other page templates in the conversion funnel.
+              </RecommendationDescription>
+            </RecommendationContent>
+          </RecommendationItem>
+        </ReportSection>
+      </ReportCard>
+      
+      <ActionButtons>
+        <Button primary>Download Report as PDF</Button>
+        <Button>Share Report</Button>
+        <Button>Export to Presentation</Button>
+      </ActionButtons>
+    </ReportContainer>
+  );
+};
+
+export default ReportView;

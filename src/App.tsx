@@ -1,26 +1,35 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-function App() {
+// Pages
+import Dashboard from './components/dashboard/Dashboard.tsx';
+import DesignSimulator from './components/simulator/DesignSimulator.tsx';
+import MetricsView from './components/metrics/MetricsView.tsx';
+import IntegrationView from './components/integration/IntegrationView.tsx';
+import ReportView from './components/report/ReportView.tsx';
+
+// Layout Components
+import Header from './components/common/Header.tsx';
+import Sidebar from './components/common/Sidebar.tsx';
+
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="min-h-screen grid grid-cols-[250px_1fr] grid-rows-[60px_1fr] bg-gray-50">
+        <Header />
+        <Sidebar />
+        <main className="col-start-2 row-start-2 p-6 overflow-auto">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/simulator" element={<DesignSimulator />} />
+            <Route path="/metrics" element={<MetricsView />} />
+            <Route path="/integration" element={<IntegrationView />} />
+            <Route path="/report" element={<ReportView />} />
+          </Routes>
+        </main>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;

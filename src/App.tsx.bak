@@ -1,0 +1,44 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+import GlobalStyle from './styles/GlobalStyle';
+import { theme } from './styles/theme';
+
+// Pages
+import Dashboard from './components/dashboard/Dashboard';
+import UploadView from './components/upload/UploadView';
+import ComparisonView from './components/comparison/ComparisonView';
+import MetricsView from './components/metrics/MetricsView';
+import IntegrationView from './components/integration/IntegrationView';
+import ReportView from './components/report/ReportView';
+
+// Layout components
+import Header from './components/common/Header';
+import Sidebar from './components/common/Sidebar';
+import { AppContainer, MainContent } from './styles/AppStyles';
+
+function App() {
+  return (
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <Router>
+        <AppContainer>
+          <Header />
+          <Sidebar />
+          <MainContent>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/upload" element={<UploadView />} />
+              <Route path="/comparison" element={<ComparisonView />} />
+              <Route path="/metrics" element={<MetricsView />} />
+              <Route path="/integration" element={<IntegrationView />} />
+              <Route path="/report" element={<ReportView />} />
+            </Routes>
+          </MainContent>
+        </AppContainer>
+      </Router>
+    </ThemeProvider>
+  );
+}
+
+export default App;

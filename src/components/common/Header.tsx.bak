@@ -1,0 +1,66 @@
+import React from 'react';
+import styled from 'styled-components';
+import { theme } from '../../styles/theme';
+
+const HeaderContainer = styled.header`
+  grid-area: header;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 ${theme.spacing.lg};
+  background-color: ${theme.colors.background};
+  border-bottom: 1px solid ${theme.colors.border};
+  box-shadow: ${theme.shadows.small};
+  z-index: 10;
+`;
+
+const Logo = styled.div`
+  display: flex;
+  align-items: center;
+  
+  h1 {
+    font-size: ${theme.fontSizes.large};
+    font-weight: 600;
+    margin: 0;
+    color: ${theme.colors.primary};
+  }
+  
+  span {
+    color: ${theme.colors.accent};
+  }
+`;
+
+const HeaderActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${theme.spacing.md};
+`;
+
+const Button = styled.button`
+  background-color: ${theme.colors.primary};
+  color: white;
+  border: none;
+  border-radius: ${theme.borderRadius.medium};
+  padding: ${theme.spacing.xs} ${theme.spacing.md};
+  font-size: ${theme.fontSizes.small};
+  transition: background-color ${theme.transitions.short};
+  
+  &:hover {
+    background-color: ${theme.colors.accent};
+  }
+`;
+
+const Header: React.FC = () => {
+  return (
+    <HeaderContainer>
+      <Logo>
+        <h1>A/B <span>Vision</span></h1>
+      </Logo>
+      <HeaderActions>
+        <Button>Export Results</Button>
+      </HeaderActions>
+    </HeaderContainer>
+  );
+};
+
+export default Header;

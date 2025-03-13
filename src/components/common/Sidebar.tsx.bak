@@ -1,0 +1,96 @@
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import styled from 'styled-components';
+import { theme } from '../../styles/theme';
+
+const SidebarContainer = styled.aside`
+  grid-area: sidebar;
+  background-color: ${theme.colors.background};
+  border-right: 1px solid ${theme.colors.border};
+  padding: ${theme.spacing.md};
+  display: flex;
+  flex-direction: column;
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    display: none;
+  }
+`;
+
+const NavMenu = styled.nav`
+  margin-top: ${theme.spacing.xl};
+`;
+
+const NavItem = styled(NavLink)`
+  display: flex;
+  align-items: center;
+  padding: ${theme.spacing.sm} ${theme.spacing.md};
+  margin-bottom: ${theme.spacing.sm};
+  border-radius: ${theme.borderRadius.medium};
+  color: ${theme.colors.textLight};
+  transition: all ${theme.transitions.short};
+  
+  &:hover {
+    background-color: ${theme.colors.backgroundAlt};
+    color: ${theme.colors.primary};
+  }
+  
+  &.active {
+    background-color: ${theme.colors.secondary};
+    color: ${theme.colors.primary};
+    font-weight: 500;
+  }
+`;
+
+const NavLabel = styled.span`
+  margin-left: ${theme.spacing.sm};
+`;
+
+const Divider = styled.hr`
+  border: 0;
+  height: 1px;
+  background-color: ${theme.colors.border};
+  margin: ${theme.spacing.md} 0;
+`;
+
+const SidebarFooter = styled.div`
+  margin-top: auto;
+  font-size: ${theme.fontSizes.small};
+  color: ${theme.colors.textLight};
+  text-align: center;
+`;
+
+const Sidebar: React.FC = () => {
+  return (
+    <SidebarContainer>
+      <NavMenu>
+        <NavItem to="/" end>
+          <NavLabel>Dashboard</NavLabel>
+        </NavItem>
+        <NavItem to="/upload">
+          <NavLabel>Upload Mockups</NavLabel>
+        </NavItem>
+        <NavItem to="/comparison">
+          <NavLabel>Heat Map Comparison</NavLabel>
+        </NavItem>
+        <NavItem to="/metrics">
+          <NavLabel>Metrics Analysis</NavLabel>
+        </NavItem>
+        <NavItem to="/integration">
+          <NavLabel>Analytics Integration</NavLabel>
+        </NavItem>
+        <NavItem to="/report">
+          <NavLabel>Report Generation</NavLabel>
+        </NavItem>
+      </NavMenu>
+      
+      <Divider />
+      
+      <SidebarFooter>
+        <p>A/B Test Visualization Generator</p>
+        <p>v1.0</p>
+      </SidebarFooter>
+    </SidebarContainer>
+  );
+};
+
+export default Sidebar;

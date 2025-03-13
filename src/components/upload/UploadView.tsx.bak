@@ -1,0 +1,162 @@
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { theme } from '../../styles/theme';
+
+const UploadContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing.lg};
+`;
+
+const SectionTitle = styled.h2`
+  color: ${theme.colors.primary};
+  margin-bottom: ${theme.spacing.md};
+`;
+
+const SectionDescription = styled.p`
+  color: ${theme.colors.textLight};
+  max-width: 800px;
+  margin-bottom: ${theme.spacing.lg};
+`;
+
+const UploadArea = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: ${theme.spacing.xl};
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const DropZone = styled.div<{ isDragActive?: boolean }>`
+  border: 2px dashed ${props => props.isDragActive ? theme.colors.primary : theme.colors.border};
+  border-radius: ${theme.borderRadius.medium};
+  padding: ${theme.spacing.xl};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: ${props => props.isDragActive ? theme.colors.backgroundAlt : theme.colors.background};
+  cursor: pointer;
+  transition: all ${theme.transitions.short};
+  min-height: 300px;
+  
+  &:hover {
+    border-color: ${theme.colors.primary};
+    background-color: ${theme.colors.backgroundAlt};
+  }
+`;
+
+const DropZoneTitle = styled.h3`
+  margin-bottom: ${theme.spacing.sm};
+  color: ${theme.colors.primary};
+`;
+
+const DropZoneDescription = styled.p`
+  text-align: center;
+  color: ${theme.colors.textLight};
+  margin-bottom: ${theme.spacing.lg};
+`;
+
+const UploadButton = styled.button`
+  background-color: ${theme.colors.primary};
+  color: white;
+  border: none;
+  border-radius: ${theme.borderRadius.medium};
+  padding: ${theme.spacing.sm} ${theme.spacing.lg};
+  font-size: ${theme.fontSizes.medium};
+  cursor: pointer;
+  transition: background-color ${theme.transitions.short};
+  
+  &:hover {
+    background-color: ${theme.colors.accent};
+  }
+`;
+
+const ActionButton = styled.button`
+  background-color: ${theme.colors.primary};
+  color: white;
+  border: none;
+  border-radius: ${theme.borderRadius.medium};
+  padding: ${theme.spacing.sm} ${theme.spacing.lg};
+  font-size: ${theme.fontSizes.medium};
+  cursor: pointer;
+  transition: background-color ${theme.transitions.short};
+  margin-top: ${theme.spacing.xl};
+  align-self: flex-end;
+  
+  &:disabled {
+    background-color: ${theme.colors.border};
+    cursor: not-allowed;
+  }
+`;
+
+const UploadView: React.FC = () => {
+  const [designA, setDesignA] = useState<File | null>(null);
+  const [designB, setDesignB] = useState<File | null>(null);
+  
+  const handleDesignAUpload = () => {
+    // This would trigger a file input in a real implementation
+    setDesignA(new File([], "mockup-a.jpg"));
+  };
+  
+  const handleDesignBUpload = () => {
+    // This would trigger a file input in a real implementation
+    setDesignB(new File([], "mockup-b.jpg"));
+  };
+  
+  return (
+    <UploadContainer>
+      <div>
+        <SectionTitle>Upload Design Mockups</SectionTitle>
+        <SectionDescription>
+          Upload two design variations to compare. Our algorithm will analyze each design
+          and generate predicted click patterns and engagement metrics.
+        </SectionDescription>
+      </div>
+      
+      <UploadArea>
+        <div>
+          <DropZoneTitle>Design Variation A</DropZoneTitle>
+          <DropZone onClick={handleDesignAUpload}>
+            {designA ? (
+              <p>Selected file: {designA.name}</p>
+            ) : (
+              <>
+                <DropZoneDescription>
+                  Drag and drop your design mockup here, or click to select a file.
+                  Supported formats: PNG, JPG, PDF
+                </DropZoneDescription>
+                <UploadButton>Select File</UploadButton>
+              </>
+            )}
+          </DropZone>
+        </div>
+        
+        <div>
+          <DropZoneTitle>Design Variation B</DropZoneTitle>
+          <DropZone onClick={handleDesignBUpload}>
+            {designB ? (
+              <p>Selected file: {designB.name}</p>
+            ) : (
+              <>
+                <DropZoneDescription>
+                  Drag and drop your design mockup here, or click to select a file.
+                  Supported formats: PNG, JPG, PDF
+                </DropZoneDescription>
+                <UploadButton>Select File</UploadButton>
+              </>
+            )}
+          </DropZone>
+        </div>
+      </UploadArea>
+      
+      <ActionButton disabled={!designA || !designB}>
+        Analyze Designs
+      </ActionButton>
+    </UploadContainer>
+  );
+};
+
+export default UploadView;

@@ -1,0 +1,417 @@
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { theme } from '../../styles/theme';
+
+const IntegrationContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing.lg};
+`;
+
+const SectionTitle = styled.h2`
+  color: ${theme.colors.primary};
+  margin-bottom: ${theme.spacing.md};
+`;
+
+const SectionDescription = styled.p`
+  color: ${theme.colors.textLight};
+  max-width: 800px;
+  margin-bottom: ${theme.spacing.lg};
+`;
+
+const TabContainer = styled.div`
+  display: flex;
+  border-bottom: 1px solid ${theme.colors.border};
+  margin-bottom: ${theme.spacing.lg};
+`;
+
+const Tab = styled.button<{ active?: boolean }>`
+  padding: ${theme.spacing.sm} ${theme.spacing.lg};
+  background-color: ${props => props.active ? theme.colors.background : 'transparent'};
+  color: ${props => props.active ? theme.colors.primary : theme.colors.textLight};
+  border: none;
+  border-bottom: 3px solid ${props => props.active ? theme.colors.primary : 'transparent'};
+  font-size: ${theme.fontSizes.medium};
+  cursor: pointer;
+  transition: all ${theme.transitions.short};
+  
+  &:hover {
+    color: ${theme.colors.primary};
+  }
+`;
+
+const IntegrationCard = styled.div`
+  background-color: ${theme.colors.background};
+  border-radius: ${theme.borderRadius.medium};
+  padding: ${theme.spacing.lg};
+  box-shadow: ${theme.shadows.medium};
+  margin-bottom: ${theme.spacing.lg};
+`;
+
+const IntegrationHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${theme.spacing.md};
+  margin-bottom: ${theme.spacing.md};
+`;
+
+const IntegrationLogo = styled.div`
+  width: 60px;
+  height: 60px;
+  background-color: ${theme.colors.backgroundAlt};
+  border-radius: ${theme.borderRadius.small};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: ${theme.colors.primary};
+`;
+
+const IntegrationTitle = styled.h3`
+  color: ${theme.colors.primary};
+  margin: 0;
+`;
+
+const IntegrationDescription = styled.p`
+  margin-bottom: ${theme.spacing.md};
+`;
+
+const ComparisonView = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: ${theme.spacing.lg};
+  margin-top: ${theme.spacing.lg};
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const ComparisonPanel = styled.div`
+  background-color: ${theme.colors.backgroundAlt};
+  border-radius: ${theme.borderRadius.medium};
+  padding: ${theme.spacing.md};
+`;
+
+const ComparisonTitle = styled.h4`
+  color: ${theme.colors.primary};
+  margin-bottom: ${theme.spacing.md};
+`;
+
+const DataFlowDiagram = styled.div`
+  background-color: ${theme.colors.background};
+  border-radius: ${theme.borderRadius.medium};
+  padding: ${theme.spacing.lg};
+  margin-top: ${theme.spacing.lg};
+  box-shadow: ${theme.shadows.small};
+`;
+
+const DiagramTitle = styled.h3`
+  color: ${theme.colors.primary};
+  margin-bottom: ${theme.spacing.md};
+`;
+
+const DiagramImage = styled.div`
+  height: 300px;
+  background-color: ${theme.colors.backgroundAlt};
+  border-radius: ${theme.borderRadius.small};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: ${theme.spacing.md};
+`;
+
+const FeatureList = styled.ul`
+  margin-top: ${theme.spacing.md};
+  padding-left: ${theme.spacing.lg};
+  
+  li {
+    margin-bottom: ${theme.spacing.sm};
+  }
+`;
+
+const IntegrationButton = styled.button`
+  background-color: ${theme.colors.primary};
+  color: white;
+  border: none;
+  border-radius: ${theme.borderRadius.medium};
+  padding: ${theme.spacing.sm} ${theme.spacing.lg};
+  font-size: ${theme.fontSizes.small};
+  cursor: pointer;
+  transition: background-color ${theme.transitions.short};
+  margin-top: ${theme.spacing.md};
+  
+  &:hover {
+    background-color: ${theme.colors.accent};
+  }
+`;
+
+const IntegrationView: React.FC = () => {
+  const [activeTab, setActiveTab] = useState('ga4');
+  
+  return (
+    <IntegrationContainer>
+      <div>
+        <SectionTitle>Analytics Integration</SectionTitle>
+        <SectionDescription>
+          See how our predictions would integrate with popular analytics platforms. 
+          This demonstration shows how A/B Vision would complement your existing analytics stack 
+          to provide early design insights before implementation.
+        </SectionDescription>
+      </div>
+      
+      <TabContainer>
+        <Tab 
+          active={activeTab === 'ga4'} 
+          onClick={() => setActiveTab('ga4')}
+        >
+          Google Analytics 4
+        </Tab>
+        <Tab 
+          active={activeTab === 'hotjar'} 
+          onClick={() => setActiveTab('hotjar')}
+        >
+          Hotjar
+        </Tab>
+        <Tab 
+          active={activeTab === 'optimize'} 
+          onClick={() => setActiveTab('optimize')}
+        >
+          A/B Testing Platforms
+        </Tab>
+        <Tab 
+          active={activeTab === 'ecommerce'} 
+          onClick={() => setActiveTab('ecommerce')}
+        >
+          E-commerce Platforms
+        </Tab>
+      </TabContainer>
+      
+      {activeTab === 'ga4' && (
+        <>
+          <IntegrationCard>
+            <IntegrationHeader>
+              <IntegrationLogo>GA4</IntegrationLogo>
+              <div>
+                <IntegrationTitle>Google Analytics 4 Integration</IntegrationTitle>
+                <p>Enhance your GA4 insights with predictive analytics</p>
+              </div>
+            </IntegrationHeader>
+            
+            <IntegrationDescription>
+              Our tool would seamlessly integrate with Google Analytics 4, allowing you to compare predicted 
+              metrics with actual performance data. This integration would enable you to validate prediction 
+              accuracy and continuously improve the prediction model.
+            </IntegrationDescription>
+            
+            <FeatureList>
+              <li>Import historical GA4 data to train and refine prediction models</li>
+              <li>Compare predicted vs. actual metrics for continuous improvement</li>
+              <li>Create custom dimensions in GA4 to track prediction accuracy</li>
+              <li>Map predicted click areas to GA4's event tracking schema</li>
+              <li>Segment predictions based on GA4 audience definitions</li>
+            </FeatureList>
+            
+            <IntegrationButton>View Integration Details</IntegrationButton>
+          </IntegrationCard>
+          
+          <ComparisonView>
+            <ComparisonPanel>
+              <ComparisonTitle>Predicted Data (A/B Vision)</ComparisonTitle>
+              <div style={{ height: '200px', backgroundColor: '#f5f5f5', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                Predicted Metrics Visualization
+              </div>
+            </ComparisonPanel>
+            
+            <ComparisonPanel>
+              <ComparisonTitle>Actual Data (GA4)</ComparisonTitle>
+              <div style={{ height: '200px', backgroundColor: '#f5f5f5', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                GA4 Metrics Visualization
+              </div>
+            </ComparisonPanel>
+          </ComparisonView>
+          
+          <DataFlowDiagram>
+            <DiagramTitle>Data Flow Between A/B Vision and GA4</DiagramTitle>
+            <DiagramImage>Data Flow Diagram Placeholder</DiagramImage>
+            <p>
+              The diagram above illustrates how data would flow between A/B Vision and Google Analytics 4. 
+              Historical GA4 data would be used to train the prediction model, while new predictions would 
+              be exported to GA4 for comparison with actual performance data once designs are implemented.
+            </p>
+          </DataFlowDiagram>
+        </>
+      )}
+      
+      {activeTab === 'hotjar' && (
+        <>
+          <IntegrationCard>
+            <IntegrationHeader>
+              <IntegrationLogo>HJ</IntegrationLogo>
+              <div>
+                <IntegrationTitle>Hotjar Integration</IntegrationTitle>
+                <p>Compare predicted heatmaps with actual user behavior</p>
+              </div>
+            </IntegrationHeader>
+            
+            <IntegrationDescription>
+              Our tool would integrate with Hotjar to provide side-by-side comparisons between predicted 
+              heatmaps and actual user behavior. This would allow you to validate prediction accuracy and 
+              identify areas for improvement in both your designs and the prediction model.
+            </IntegrationDescription>
+            
+            <FeatureList>
+              <li>Side-by-side comparison of predicted vs. actual heatmaps</li>
+              <li>Overlay predicted patterns with actual Hotjar data</li>
+              <li>Extend predictions to include scroll behavior comparison</li>
+              <li>Tag elements with significant differences for review in user recordings</li>
+              <li>Combine quantitative predictions with qualitative Hotjar insights</li>
+            </FeatureList>
+            
+            <IntegrationButton>View Integration Details</IntegrationButton>
+          </IntegrationCard>
+          
+          <ComparisonView>
+            <ComparisonPanel>
+              <ComparisonTitle>Predicted Heatmap (A/B Vision)</ComparisonTitle>
+              <div style={{ height: '200px', backgroundColor: '#f5f5f5', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                Predicted Heatmap Visualization
+              </div>
+            </ComparisonPanel>
+            
+            <ComparisonPanel>
+              <ComparisonTitle>Actual Heatmap (Hotjar)</ComparisonTitle>
+              <div style={{ height: '200px', backgroundColor: '#f5f5f5', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                Hotjar Heatmap Visualization
+              </div>
+            </ComparisonPanel>
+          </ComparisonView>
+          
+          <DataFlowDiagram>
+            <DiagramTitle>Visual Overlay System</DiagramTitle>
+            <DiagramImage>Visual Overlay Diagram Placeholder</DiagramImage>
+            <p>
+              The diagram above illustrates our visual overlay system that would allow you to layer 
+              predicted heatmaps over actual Hotjar heatmaps. This would help identify areas where 
+              predictions align with actual behavior and areas where the model needs improvement.
+            </p>
+          </DataFlowDiagram>
+        </>
+      )}
+      
+      {activeTab === 'optimize' && (
+        <>
+          <IntegrationCard>
+            <IntegrationHeader>
+              <IntegrationLogo>A/B</IntegrationLogo>
+              <div>
+                <IntegrationTitle>A/B Testing Platform Integration</IntegrationTitle>
+                <p>Streamline your testing workflow with predictive insights</p>
+              </div>
+            </IntegrationHeader>
+            
+            <IntegrationDescription>
+              Our tool would integrate with popular A/B testing platforms like Optimizely and VWO to 
+              streamline your testing workflow. Predictions would help you prioritize which designs to 
+              test, reducing the resources spent on testing underperforming variations.
+            </IntegrationDescription>
+            
+            <FeatureList>
+              <li>Export mockups with prediction data directly to testing platforms</li>
+              <li>Pre-configure test variations based on prediction insights</li>
+              <li>Import actual test results to validate predictions</li>
+              <li>Create a feedback loop for continuous model improvement</li>
+              <li>Reduce time and resources spent on testing underperforming designs</li>
+            </FeatureList>
+            
+            <IntegrationButton>View Integration Details</IntegrationButton>
+          </IntegrationCard>
+          
+          <ComparisonView>
+            <ComparisonPanel>
+              <ComparisonTitle>Prediction-Based Test Configuration</ComparisonTitle>
+              <div style={{ height: '200px', backgroundColor: '#f5f5f5', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                Test Configuration Visualization
+              </div>
+            </ComparisonPanel>
+            
+            <ComparisonPanel>
+              <ComparisonTitle>Results Validation</ComparisonTitle>
+              <div style={{ height: '200px', backgroundColor: '#f5f5f5', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                Results Comparison Visualization
+              </div>
+            </ComparisonPanel>
+          </ComparisonView>
+          
+          <DataFlowDiagram>
+            <DiagramTitle>Bidirectional Data Flow</DiagramTitle>
+            <DiagramImage>Bidirectional Flow Diagram Placeholder</DiagramImage>
+            <p>
+              The diagram above illustrates the bidirectional data flow between A/B Vision and testing 
+              platforms. Predictions would be exported to configure tests, while actual results would 
+              be imported back to validate and improve the prediction model.
+            </p>
+          </DataFlowDiagram>
+        </>
+      )}
+      
+      {activeTab === 'ecommerce' && (
+        <>
+          <IntegrationCard>
+            <IntegrationHeader>
+              <IntegrationLogo>EC</IntegrationLogo>
+              <div>
+                <IntegrationTitle>E-commerce Platform Integration</IntegrationTitle>
+                <p>Optimize your beauty product pages and checkout flow</p>
+              </div>
+            </IntegrationHeader>
+            
+            <IntegrationDescription>
+              Our tool would integrate with popular e-commerce platforms to provide specialized insights 
+              for beauty product pages and checkout flows. This would help you optimize your store layout, 
+              product pages, and checkout process before implementation.
+            </IntegrationDescription>
+            
+            <FeatureList>
+              <li>Analyze current store layouts and suggest optimizations</li>
+              <li>Generate predictions specific to product page templates</li>
+              <li>Provide specialized insights for checkout funnel optimization</li>
+              <li>Connect to e-commerce platform APIs to import page templates</li>
+              <li>Map prediction data directly to theme elements</li>
+            </FeatureList>
+            
+            <IntegrationButton>View Integration Details</IntegrationButton>
+          </IntegrationCard>
+          
+          <ComparisonView>
+            <ComparisonPanel>
+              <ComparisonTitle>Product Page Optimization</ComparisonTitle>
+              <div style={{ height: '200px', backgroundColor: '#f5f5f5', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                Product Page Optimization Visualization
+              </div>
+            </ComparisonPanel>
+            
+            <ComparisonPanel>
+              <ComparisonTitle>Checkout Flow Analysis</ComparisonTitle>
+              <div style={{ height: '200px', backgroundColor: '#f5f5f5', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                Checkout Flow Analysis Visualization
+              </div>
+            </ComparisonPanel>
+          </ComparisonView>
+          
+          <DataFlowDiagram>
+            <DiagramTitle>E-commerce Integration Architecture</DiagramTitle>
+            <DiagramImage>E-commerce Integration Diagram Placeholder</DiagramImage>
+            <p>
+              The diagram above illustrates how A/B Vision would integrate with e-commerce platforms 
+              to provide specialized insights for beauty product pages and checkout flows. The integration 
+              would allow you to optimize your store before implementing changes.
+            </p>
+          </DataFlowDiagram>
+        </>
+      )}
+    </IntegrationContainer>
+  );
+};
+
+export default IntegrationView;

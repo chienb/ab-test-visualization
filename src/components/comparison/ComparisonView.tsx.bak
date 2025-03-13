@@ -1,0 +1,264 @@
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { theme } from '../../styles/theme';
+
+const ComparisonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing.lg};
+`;
+
+const SectionTitle = styled.h2`
+  color: ${theme.colors.primary};
+  margin-bottom: ${theme.spacing.md};
+`;
+
+const SectionDescription = styled.p`
+  color: ${theme.colors.textLight};
+  max-width: 800px;
+  margin-bottom: ${theme.spacing.lg};
+`;
+
+const ComparisonArea = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: ${theme.spacing.xl};
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const DesignContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing.md};
+`;
+
+const DesignTitle = styled.h3`
+  color: ${theme.colors.primary};
+  margin-bottom: ${theme.spacing.xs};
+`;
+
+const MockupContainer = styled.div`
+  position: relative;
+  border-radius: ${theme.borderRadius.medium};
+  overflow: hidden;
+  box-shadow: ${theme.shadows.medium};
+  background-color: ${theme.colors.background};
+`;
+
+const MockupImage = styled.div`
+  width: 100%;
+  height: 400px;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+`;
+
+const HeatmapOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/path-to-heatmap.png');
+  opacity: 0.6;
+  pointer-events: none;
+`;
+
+const PlaceholderText = styled.p`
+  color: ${theme.colors.textLight};
+`;
+
+const ControlPanel = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: ${theme.colors.backgroundAlt};
+  padding: ${theme.spacing.md};
+  border-radius: ${theme.borderRadius.medium};
+  margin-top: ${theme.spacing.lg};
+`;
+
+const ControlGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${theme.spacing.md};
+`;
+
+const Label = styled.label`
+  font-size: ${theme.fontSizes.small};
+  color: ${theme.colors.textLight};
+`;
+
+const Slider = styled.input`
+  width: 150px;
+`;
+
+const ToggleButton = styled.button<{ active?: boolean }>`
+  background-color: ${props => props.active ? theme.colors.primary : theme.colors.background};
+  color: ${props => props.active ? 'white' : theme.colors.textLight};
+  border: 1px solid ${theme.colors.border};
+  border-radius: ${theme.borderRadius.medium};
+  padding: ${theme.spacing.xs} ${theme.spacing.md};
+  font-size: ${theme.fontSizes.small};
+  cursor: pointer;
+  transition: all ${theme.transitions.short};
+  
+  &:hover {
+    background-color: ${props => props.active ? theme.colors.primary : theme.colors.backgroundAlt};
+  }
+`;
+
+const MetricsCard = styled.div`
+  margin-top: ${theme.spacing.lg};
+  background-color: ${theme.colors.background};
+  border-radius: ${theme.borderRadius.medium};
+  padding: ${theme.spacing.lg};
+  box-shadow: ${theme.shadows.small};
+`;
+
+const MetricsTitle = styled.h3`
+  color: ${theme.colors.primary};
+  margin-bottom: ${theme.spacing.md};
+`;
+
+const MetricsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: ${theme.spacing.md};
+  
+  @media (max-width: ${theme.breakpoints.tablet}) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @media (max-width: ${theme.breakpoints.mobile}) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const MetricItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${theme.spacing.xs};
+`;
+
+const MetricLabel = styled.span`
+  font-size: ${theme.fontSizes.small};
+  color: ${theme.colors.textLight};
+`;
+
+const MetricValue = styled.span<{ highlight?: boolean }>`
+  font-size: ${theme.fontSizes.large};
+  font-weight: 600;
+  color: ${props => props.highlight ? theme.colors.primary : theme.colors.text};
+`;
+
+const ComparisonView: React.FC = () => {
+  const [heatmapOpacity, setHeatmapOpacity] = useState(60);
+  const [showHeatmap, setShowHeatmap] = useState(true);
+  
+  return (
+    <ComparisonContainer>
+      <div>
+        <SectionTitle>Heat Map Comparison</SectionTitle>
+        <SectionDescription>
+          Compare predicted click patterns between your design variations. 
+          Warmer colors indicate areas with higher predicted engagement.
+        </SectionDescription>
+      </div>
+      
+      <ControlPanel>
+        <ControlGroup>
+          <Label>Heatmap Opacity:</Label>
+          <Slider 
+            type="range" 
+            min="0" 
+            max="100" 
+            value={heatmapOpacity} 
+            onChange={(e) => setHeatmapOpacity(parseInt(e.target.value))} 
+          />
+          <span>{heatmapOpacity}%</span>
+        </ControlGroup>
+        
+        <ControlGroup>
+          <ToggleButton 
+            active={showHeatmap} 
+            onClick={() => setShowHeatmap(true)}
+          >
+            Show Heatmap
+          </ToggleButton>
+          <ToggleButton 
+            active={!showHeatmap} 
+            onClick={() => setShowHeatmap(false)}
+          >
+            Hide Heatmap
+          </ToggleButton>
+        </ControlGroup>
+      </ControlPanel>
+      
+      <ComparisonArea>
+        <DesignContainer>
+          <DesignTitle>Design Variation A</DesignTitle>
+          <MockupContainer>
+            <MockupImage>
+              <PlaceholderText>Mockup Image A</PlaceholderText>
+              {showHeatmap && <HeatmapOverlay style={{ opacity: heatmapOpacity / 100 }} />}
+            </MockupImage>
+          </MockupContainer>
+          
+          <MetricsCard>
+            <MetricsTitle>Predicted Metrics</MetricsTitle>
+            <MetricsGrid>
+              <MetricItem>
+                <MetricLabel>Click-Through Rate</MetricLabel>
+                <MetricValue>3.2%</MetricValue>
+              </MetricItem>
+              <MetricItem>
+                <MetricLabel>Engagement Time</MetricLabel>
+                <MetricValue>45s</MetricValue>
+              </MetricItem>
+              <MetricItem>
+                <MetricLabel>Add-to-Cart Rate</MetricLabel>
+                <MetricValue>2.8%</MetricValue>
+              </MetricItem>
+            </MetricsGrid>
+          </MetricsCard>
+        </DesignContainer>
+        
+        <DesignContainer>
+          <DesignTitle>Design Variation B</DesignTitle>
+          <MockupContainer>
+            <MockupImage>
+              <PlaceholderText>Mockup Image B</PlaceholderText>
+              {showHeatmap && <HeatmapOverlay style={{ opacity: heatmapOpacity / 100 }} />}
+            </MockupImage>
+          </MockupContainer>
+          
+          <MetricsCard>
+            <MetricsTitle>Predicted Metrics</MetricsTitle>
+            <MetricsGrid>
+              <MetricItem>
+                <MetricLabel>Click-Through Rate</MetricLabel>
+                <MetricValue highlight>4.7%</MetricValue>
+              </MetricItem>
+              <MetricItem>
+                <MetricLabel>Engagement Time</MetricLabel>
+                <MetricValue highlight>58s</MetricValue>
+              </MetricItem>
+              <MetricItem>
+                <MetricLabel>Add-to-Cart Rate</MetricLabel>
+                <MetricValue highlight>3.9%</MetricValue>
+              </MetricItem>
+            </MetricsGrid>
+          </MetricsCard>
+        </DesignContainer>
+      </ComparisonArea>
+    </ComparisonContainer>
+  );
+};
+
+export default ComparisonView;
